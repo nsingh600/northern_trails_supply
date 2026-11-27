@@ -1,0 +1,41 @@
+<div class="p-4 p-md-5 mb-4 rounded-3 text-white shadow-sm" style="background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);">
+  <h1 class="display-6 fw-bold">Northern Trails Supply Co.</h1>
+  <p class="lead mb-0">Winnipeg's backcountry outfitter for camping, hiking, and sub-zero winter gear.</p>
+</div>
+
+<%= render "search_form" %>
+
+<% if @products.respond_to?(:current_page) %>
+  <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center mb-3 text-muted small">
+    <span>
+      Page <strong><%= @products.current_page %></strong> of <strong><%= @products.total_pages %></strong>
+      (<%= @products.total_count %> items total)
+    </span>
+    <span>Showing <%= @products.offset_value + 1 %>&ndash;<%= [@products.offset_value + @products.size, @products.total_count].min %></span>
+  </div>
+<% else %>
+  <div class="mb-3 text-muted small">
+    Showing <strong><%= @products.size %></strong> items
+  </div>
+<% end %>
+<% if @products.any? %>
+  <div class="row g-4">
+    <%= render @products %>
+  </div>
+<% else %>
+  <div class="alert alert-info">No products found.</div>
+<% end %>
+<div class="d-flex flex-wrap gap-2 mb-4">
+  <%= link_to "All Products", products_path,
+      class: "btn btn-sm #{@filter.blank? ? 'btn-dark' : 'btn-outline-dark'}" %>
+
+  <%= link_to "On Sale", products_path(filter: "on_sale"),
+      class: "btn btn-sm #{@filter == 'on_sale' ? 'btn-primary' : 'btn-outline-primary'}" %>
+
+  <%= link_to "New (Last 3 Days)", products_path(filter: "new"),
+      class: "btn btn-sm #{@filter == 'new' ? 'btn-success' : 'btn-outline-success'}" %>
+
+  <%= link_to "Recently Updated", products_path(filter: "recently_updated"),
+      class: "btn btn-sm #{@filter == 'recently_updated' ? 'btn-info' : 'btn-outline-info'}" %>
+</div>
+<div class="mt-4 d-flex justify-content-center"><%= paginate @products %></div>

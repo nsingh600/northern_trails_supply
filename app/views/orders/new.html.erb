@@ -1,0 +1,36 @@
+<div class="container my-4">
+  <h1 class="mb-3">Checkout & Invoice</h1>
+  <div class="row g-4">
+    <div class="col-md-6">
+      <h4>Shipping Details</h4>
+      <%= form_with url: new_order_path, method: :get, local: true, class: "mb-4" do |f| %>
+        <div class="mb-2"><%= f.label :street_address %><%= f.text_field :street_address, value: @street_address, class: "form-control" %></div>
+        <div class="mb-2"><%= f.label :city %><%= f.text_field :city, value: @city, class: "form-control" %></div>
+        <div class="mb-2"><%= f.label :postal_code %><%= f.text_field :postal_code, value: @postal_code, class: "form-control" %></div>
+        <div class="mb-3"><%= f.label :province_id, "Province" %><%= f.collection_select :province_id, Province.order(:name), :id, :name, { selected: @province&.id }, { class: "form-select" } %></div>
+        <%= f.submit "Recalculate Taxes", class: "btn btn-outline-secondary btn-sm" %>
+      <% end %>
+    </div>
+    <div class="col-md-6">
+      <h4>Order Summary (<%= @province&.name %>)</h4>
+      <table class="table table-sm">
+        <thead><tr><th>Item</th><th>Qty</th><th>Line Total</th></tr></thead>
+        <tbody><% @cart_items.each do |row| %><tr><td><%= row[:product].name %></td><td><%= row[:quantity] %></td><td><%= number_to_currency(row[:line_total]) %></td></tr><% end %></tbody>
+      </table>
+      <ul class="list-group mb-3">
+        <li class="list-group-item d-flex justify-content-between"><span>Subtotal</span><strong><%= number_to_currency(@subtotal) %></strong></li>
+        <li class="list-group-item d-flex justify-content-between"><span>GST (<%= number_to_percentage(@gst_rate * 100, precision: 2) %>)</span><span><%= number_to_currency(@gst_amount) %></span></li>
+        <li class="list-group-item d-flex justify-content-between"><span>PST (<%= number_to_percentage(@pst_rate * 100, precision: 3) %>)</span><span><%= number_to_currency(@pst_amount) %></span></li>
+        <li class="list-group-item d-flex justify-content-between"><span>HST (<%= number_to_percentage(@hst_rate * 100, precision: 2) %>)</span><span><%= number_to_currency(@hst_amount) %></span></li>
+        <li class="list-group-item d-flex justify-content-between table-active"><strong>Total</strong><strong><%= number_to_currency(@total) %></strong></li>
+      </ul>
+      <%= form_with model: Order.new, url: orders_path, local: true do |f| %>
+        <%= f.hidden_field :street_address, value: @street_address %>
+        <%= f.hidden_field :city, value: @city %>
+        <%= f.hidden_field :postal_code, value: @postal_code %>
+        <%= f.hidden_field :province_id, value: @province&.id %>
+        <%= f.submit "Place Order", class: "btn btn-success w-100" %>
+      <% end %>
+    </div>
+  </div>
+</div>

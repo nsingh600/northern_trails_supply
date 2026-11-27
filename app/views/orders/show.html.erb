@@ -1,0 +1,16 @@
+<div class="container my-4">
+  <h1>Order #<%= @order.id %> (<%= @order.status.capitalize %>)</h1>
+  <p><strong>Ship To:</strong> <%= [@order.street_address, @order.city, @order.province&.name, @order.postal_code].compact_blank.join(", ") %></p>
+  <table class="table table-bordered">
+    <thead><tr><th>Product</th><th>Unit Price</th><th>Qty</th><th>Total</th></tr></thead>
+    <tbody><% @order.order_items.each do |item| %><tr><td><%= item.product.name %></td><td><%= number_to_currency(item.unit_price) %></td><td><%= item.quantity %></td><td><%= number_to_currency(item.unit_price * item.quantity) %></td></tr><% end %></tbody>
+  </table>
+  <ul class="list-group mb-3" style="max-width: 420px;">
+    <li class="list-group-item d-flex justify-content-between"><span>Subtotal</span><strong><%= number_to_currency(@order.subtotal) %></strong></li>
+    <li class="list-group-item d-flex justify-content-between"><span>GST</span><span><%= number_to_currency(@order.gst_amount) %></span></li>
+    <li class="list-group-item d-flex justify-content-between"><span>PST</span><span><%= number_to_currency(@order.pst_amount) %></span></li>
+    <li class="list-group-item d-flex justify-content-between"><span>HST</span><span><%= number_to_currency(@order.hst_amount) %></span></li>
+    <li class="list-group-item d-flex justify-content-between table-active"><strong>Total Paid</strong><strong><%= number_to_currency(@order.total) %></strong></li>
+  </ul>
+  <%= link_to "My Orders", orders_path, class: "btn btn-secondary mt-2" %>
+</div>

@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background-color: #1b4332;">
+  <div class="container">
+    <%= link_to "🌲 Northern Trails Supply Co.", root_path, class: "navbar-brand fw-bold" %>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <%= link_to "All Gear", root_path, class: "nav-link" %>
+        </li>
+        <% (@categories || Category.order(:name)).each do |category| %>
+          <li class="nav-item">
+            <%= link_to category.name, category_path(category), class: "nav-link" %>
+          </li>
+        <% end %>
+      </ul>
+
+      <div class="d-flex gap-2 align-items-center">
+        <% if user_signed_in? %>
+          <%= link_to "Orders", orders_path, class: "btn btn-outline-light btn-sm" %>
+          <%= link_to "Account", edit_user_registration_path, class: "btn btn-outline-light btn-sm" %>
+          <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "btn btn-outline-warning btn-sm" %>
+        <% else %>
+          <%= link_to "Log in", new_user_session_path, class: "btn btn-outline-light btn-sm" %>
+          <%= link_to "Sign up", new_user_registration_path, class: "btn btn-light btn-sm" %>
+        <% end %>
+
+        <%= link_to cart_path, class: "btn btn-warning btn-sm fw-semibold" do %>
+          Cart <span class="badge bg-dark text-white ms-1"><%= respond_to?(:cart_item_count) ? cart_item_count : 0 %></span>
+        <% end %>
+        <%= link_to "Admin", admin_root_path, class: "btn btn-outline-light btn-sm" %>
+      </div>
+    </div>
+  </div>
+</nav>

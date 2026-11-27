@@ -1,0 +1,16 @@
+<div class="mb-4 pb-2 border-bottom">
+  <h1 class="fw-bold"><%= @category.name %></h1>
+  <p class="text-muted mb-0"><%= @category.description %></p>
+</div>
+
+<% if @products.any? %>
+  <div class="row g-4">
+    <%= render partial: "products/product", collection: @products, as: :product %>
+  </div>
+
+  <div class="d-flex justify-content-center mt-4">
+    <%= paginate @products %>
+  </div>
+<% else %>
+  <div class="alert alert-info">No products found in this category.</div>
+<% end %>

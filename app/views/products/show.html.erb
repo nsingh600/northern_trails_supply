@@ -1,0 +1,30 @@
+<div class="container py-4">
+  <div class="mb-3">
+    <%= link_to "← Back to Products", products_path, class: "btn btn-outline-secondary btn-sm" %>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-6">
+      <%= button_to "Add to Cart", add_item_cart_path(@product), method: :post, class: "btn btn-success mt-2" %>
+        <%= image_tag product_card_image_url(@product),
+            alt: @product.name,
+            class: "img-fluid rounded shadow-sm w-100",
+            style: "max-height: 420px; object-fit: cover;" %>
+    </div>
+
+    <div class="col-md-6">
+      <% if @product.category.present? %>
+        <span class="badge bg-secondary mb-2"><%= @product.category.name %></span>
+      <% end %>
+
+      <h1 class="h2 fw-bold"><%= @product.name %></h1>
+
+      <% if @product.respond_to?(:price) && @product.price.present? %>
+        <p class="fs-4 fw-semibold text-success"><%= number_to_currency(@product.price) %></p>
+      <% end %>
+
+      <p class="text-muted"><%= @product.description %></p>
+    </div>
+  </div>
+</div>
+<%= button_to "Add to Cart", cart_items_path(product_id: @product.id), method: :post, class: "btn btn-success mt-2" %>

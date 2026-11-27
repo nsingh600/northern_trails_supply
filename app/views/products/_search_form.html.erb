@@ -1,0 +1,16 @@
+<%= form_with url: products_path, method: :get, local: true, class: "row g-3" do |f| %>
+  <div class="col-md-4">
+    <%= f.text_field :q, value: params[:q], placeholder: "Search products...", class: "form-control" %>
+  </div>
+
+  <div class="col-md-4">
+    <%= f.select :category_id,
+          options_from_collection_for_select(@categories.to_a, :id, :name, params[:category_id]),
+          { include_blank: "All Categories" },
+          { class: "form-select" } %>
+  </div>
+
+  <div class="col-md-4">
+    <%= f.submit "Filter", class: "btn btn-primary" %>
+  </div>
+<% end %>
